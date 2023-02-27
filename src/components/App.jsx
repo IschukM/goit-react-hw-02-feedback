@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Section } from './Section/Section';
 import { Feedback } from './Feedback/Feedback';
+import { Statistics } from './Statistics/Statistics';
 
 export class App extends Component {
   state = {
@@ -23,13 +24,40 @@ export class App extends Component {
       }
     });
   };
+
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    return good + neutral + bad;
+  };
+  countPositiveFeedbackPercentage = () => {
+    return Math.round((this.state.good / this.countTotalFeedback()) * 100);
+  };
+
   render() {
     return (
       <>
         <Section title="Feedback">
           <Feedback feedback={this.state} onIncrement={this.stateIncrement} />
         </Section>
-        <Section title="Statistics"></Section>
+        <Section title="Statistics">
+          {this.countTotalFeedback() ? (
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={this.countTotalFeedback()}
+              percentage={
+                !isNaN(this.countPositiveFeedbackPercentage())
+                  ? this.countPositiveFeedbackPercentage()
+                  : 0
+              }
+            />
+          ) : (
+            <div className="Container">
+              <p className="feedalert">There is no feedback</p>
+            </div>
+          )}
+        </Section>
       </>
     );
   }
