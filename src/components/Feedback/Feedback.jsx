@@ -1,4 +1,5 @@
 import React from 'react';
+import './Feedback.css';
 export const Feedback = ({ onIncrement }) => (
   <>
     <div className="Controls">
